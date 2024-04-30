@@ -1,12 +1,14 @@
 from tkinter import *
+from quiz_brain import QuizBrain
 
 THEME_COLOR = "#375362"
 
 
 class QuizzInterface:
 
-    def __init__(self):
-        #Window
+    def __init__(self, quiz_brain: QuizBrain):
+        self.quiz = quiz_brain
+        # Window
         self.window = Tk()
         self.window.title("Quizzler")
         self.window.config(padx=20, pady=20, bg=THEME_COLOR)
@@ -22,7 +24,8 @@ class QuizzInterface:
         self.quest_text = self.canvas.create_text(
             150,
             125,
-            text="The HTML5 standard was published in 2014.",
+            width=280,
+            text="",
             font=("Arial", 20, "italic")
         )
         self.canvas.grid(row=1, column=0, columnspan=2, pady=50)
@@ -37,5 +40,9 @@ class QuizzInterface:
         cross_img = PhotoImage(file="images/false.png")
         self.cross_button = Button(image=cross_img, highlightthickness=0)
         self.cross_button.grid(row=2, column=1)
-
+        self.get_next_question()
         self.window.mainloop()
+
+    def get_next_question(self):
+        q_txt = self.quiz.next_question()
+        self.canvas.itemconfig(self.quest_text, text=q_txt)
